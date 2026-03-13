@@ -1,9 +1,9 @@
-# OA-PRS Transfer Learning: Cross-Ancestry Polygenic Risk Score Pipeline
+# Cembra AI: OA-PRS Transfer Learning -  Cross-Ancestry Polygenic Risk Score Pipeline
 
 [![CI](https://img.shields.io/badge/CI-passing-brightgreen)](https://github.com/your-org/oa-prs-transfer)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9+-3776ab.svg)](https://www.python.org/)
-[![Paper](https://img.shields.io/badge/Paper-Cell%20Genomics-success)](https://doi.org/10.1016/j.xgen.xxxx)
+
 
 ## Overview
 
@@ -467,41 +467,18 @@ The pipeline includes comprehensive evaluation per **Cell Genomics fairness guid
 
 ## Contributing
 
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/your-feature`)
-3. Commit changes with clear messages
-4. Submit a pull request with description
-5. Ensure tests pass (`pytest tests/`)
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
-
 ## License
 
 This project is licensed under the **Apache License 2.0** - see the [LICENSE](LICENSE) file for details.
 
-## Citation
 
-If you use this pipeline in your research, please cite:
-
-```bibtex
-@article{yourname2024oaPRS,
-  title={Cross-Ancestry Polygenic Risk Scoring for Osteoarthritis with
-         Deep Learning Transfer and Fairness Evaluation},
-  author={Your Name and Collaborators},
-  journal={Cell Genomics},
-  year={2024},
-  doi={https://doi.org/10.1016/j.xgen.xxxx}
-}
-```
 
 ## Support
 
 - **Issues**: Report bugs and feature requests on [GitHub Issues](https://github.com/your-org/oa-prs-transfer/issues)
 - **Discussions**: Join [GitHub Discussions](https://github.com/your-org/oa-prs-transfer/discussions) for Q&A
 - **Documentation**: See [docs/](docs/) for detailed guides
-- **Email**: oa-prs-transfer@your-institution.edu
+- **Email**: zzhaobz@connect.ust.hk
 
 ---
 
