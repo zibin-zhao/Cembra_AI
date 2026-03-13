@@ -1,0 +1,48 @@
+# TWAS/SMR Configuration
+twas:
+  # S-PrediXcan (summary-stat TWAS)
+  s_predixcan:
+    repo_url: "https://github.com/hakyimlab/MetaXcan"
+    install_dir: "${data.data_dir}/tools/metaxcan/"
+
+    params:
+      # Tissues relevant to OA
+      tissues:
+        - "Cells_Cultured_fibroblasts"
+        - "Adipose_Subcutaneous"
+        - "Muscle_Skeletal"
+        - "Whole_Blood"
+      model_db_dir: "${annotations.gtex.model_dir}"
+      covariance_dir: "${annotations.gtex.covariance_dir}"
+      # Significance threshold
+      p_threshold: 0.05  # After Bonferroni correction
+
+  # S-MultiXcan (multi-tissue joint test)
+  s_multixcan:
+    enabled: true
+
+  # PredictAP (EAS-specific expression prediction)
+  predict_ap:
+    enabled: true
+    description: "Improve EAS expression prediction robustness"
+    reference: "https://academic.oup.com/bib/article/25/6/bbae549/7832363"
+
+  # SMR-HEIDI
+  smr_heidi:
+    executable: "smr"
+    url: "https://yanglab.westlake.edu.cn/software/smr/"
+    install_dir: "${data.data_dir}/tools/smr/"
+
+    params:
+      # SMR test
+      smr_p_threshold: 5.0e-8   # p-value threshold for SMR
+      # HEIDI test
+      heidi_p_threshold: 0.01   # pHEIDI >= 0.01 → likely causal
+      heidi_min_snps: 3         # Minimum SNPs for HEIDI test
+      # eQTL data
+      eqtl_source: "GTEx_v8"
+
+  resources:
+    memory: "32G"
+    cpus: 8
+    time: "4:00:00"

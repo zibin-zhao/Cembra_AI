@@ -1,0 +1,24 @@
+# PolyFun Configuration (functional prior estimation)
+polyfun:
+  repo_url: "https://github.com/omerwe/polyfun"
+  install_dir: "${data.data_dir}/tools/polyfun/"
+
+  params:
+    # Annotations to use for prior estimation
+    annotations:
+      - "baselineLF2.2"       # Baseline LD annotations v2.2
+      - "enformer_scores"     # Our Enformer SAD scores
+      - "turf_scores"         # TURF tissue-specific scores
+      - "regulomedb"          # RegulomeDB rankings
+      - "conservation"        # PhyloP + phastCons
+
+    # Prior estimation method
+    method: "L2_regularized"  # Ridge regression for annotation coefficients
+
+    # Output: per-SNP heritability (proportional to causal prior)
+    output_type: "snpvar"     # .snpvar_ridge.gz files
+
+  resources:
+    memory: "64G"
+    cpus: 8
+    time: "8:00:00"

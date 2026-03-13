@@ -1,0 +1,49 @@
+# Enformer Configuration (sequence-to-function variant scoring)
+enformer:
+  model:
+    name: "enformer"
+    # DeepMind Enformer pre-trained model
+    hub_url: "https://tfhub.dev/deepmind/enformer/1"
+    # Alternative: use pre-computed scores
+    precomputed_scores:
+      enabled: false
+      path: "${data.data_dir}/external/enformer_precomputed/"
+      # Pre-computed SAD scores available for MAF>0.5% variants
+      # HDF5 format, per chromosome
+
+  scoring:
+    # Variant effect prediction method
+    method: "SAD"          # SNP Activity Difference
+    sequence_length: 393216
+    prediction_length: 114688
+    bin_size: 128          # 128bp resolution
+
+    # Target tracks to extract (out of 5313 human tracks)
+    # Focus on joint/cartilage-relevant tracks
+    target_tracks:
+      - "CAGE"             # Gene expression
+      - "DNase"            # Chromatin accessibility
+      - "H3K27ac"          # Active enhancers
+      - "H3K4me3"          # Active promoters
+      - "ATAC"             # Chromatin accessibility
+    # Or use all tracks and let downstream models select
+    use_all_tracks: false
+    n_top_tracks: 100      # If not using specific tracks
+
+    # Batch processing
+    batch_size: 4          # Per GPU (A100 80GB)
+    num_workers: 4
+
+  # Reference genome
+  genome:
+    build: "hg38"
+    fasta: "${data.data_dir}/external/hg38.fa"
+
+  resources:
+    partition: "gpu"
+    gpus: 1
+    gpu_type: "a100"
+    memory: "64G"
+    cpus: 4
+    time: "24:00:00"
+    array: "1-22"          # Parallelize by chromosome

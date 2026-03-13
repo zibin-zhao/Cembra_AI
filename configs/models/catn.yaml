@@ -1,0 +1,96 @@
+# CATN (Cross-Ancestry Transfer Network) Configuration
+catn:
+  # === Architecture ===
+  architecture:
+    # Per-SNP input features
+    n_snp_features: 12     # beta, SE, -log10p, MAF_eur, MAF_eas, LD_score,
+                           # enformer_top5, turf_score, conservation, pip
+    d_model: 256           # Hidden dimension
+    d_ff: 512              # Feed-forward dimension
+
+    # LD-Block Transformer
+    block_transformer:
+      n_layers: 4
+      n_heads: 8
+      dropout: 0.1
+      max_snps_per_block: 500  # Truncate very large LD blocks
+
+    # Cross-Block Attention
+    cross_block:
+      n_layers: 2
+      n_heads: 8
+      dropout: 0.1
+      # Sparse attention: only attend to top-k most relevant blocks
+      sparse_top_k: 50
+
+    # Prediction heads
+    risk_head:
+      hidden_dims: [128, 64]
+      dropout: 0.3
+
+    # Domain discriminator (gradient reversal)
+    domain_discriminator:
+      hidden_dims: [128, 64]
+      dropout: 0.3
+
+  # === Training ===
+  training:
+    # Phase 1: EUR pre-training
+    phase1:
+      name: "eur_pretrain"
+      epochs: 100
+      batch_size: 256
+      learning_rate: 1.0e-4
+      weight_decay: 1.0e-5
+      scheduler: "cosine_warmup"
+      warmup_steps: 500
+      # Simulated genotypes from EUR summary stats + LD
+      n_simulated_individuals: 100000
+
+    # Phase 2: Cross-ancestry domain adaptation
+    phase2:
+      name: "domain_adaptation"
+      epochs: 50
+      batch_size: 128
+      learning_rate: 5.0e-5
+      weight_decay: 1.0e-5
+      # Domain adversarial weight scheduling
+      lambda_domain: 0.1        # Starting weight
+      lambda_domain_max: 1.0    # Max weight
+      lambda_rampup_epochs: 20  # Epochs to ramp up
+      # Loss weights
+      alpha_eas_risk: 2.0       # Upweight EAS risk loss (small sample)
+
+    # Phase 3: Individual fine-tuning (when data available)
+    phase3:
+      name: "individual_finetune"
+      enabled: false            # Set to true when individual data arrives
+      epochs: 30
+      batch_size: 64
+      learning_rate: 1.0e-5
+      freeze_backbone: true     # Only train prediction head
+      min_individuals: 500      # Minimum required for fine-tuning
+
+    # General training settings
+    mixed_precision: true       # AMP for A100
+    gradient_checkpointing: true
+    gradient_clip_norm: 1.0
+    early_stopping_patience: 10
+    seed: ${project.seed}
+
+  # === Genotype Simulation ===
+  simulation:
+    method: "mvnorm_ld"         # Multivariate normal from LD structure
+    # For each LD block: sample genotypes from N(0, LD_matrix)
+    # Then threshold to get 0/1/2 genotype calls
+    # Phenotype: logistic model using true GWAS betas + noise
+    noise_scale: 1.0
+    prevalence: 0.15            # OA prevalence (~15% for knee OA)
+
+  resources:
+    partition: "gpu"
+    gpus: 1
+    gpu_type: "a100"
+    memory: "64G"
+    cpus: 8
+    time: "8:00:00"

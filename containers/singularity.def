@@ -1,0 +1,87 @@
+Bootstrap: docker
+From: nvidia/cuda:12.1.1-devel-ubuntu22.04
+
+%labels
+    Author OA-PRS Team
+    Version 0.1.0
+    Description OA-PRS Transfer Learning Pipeline (Singularity/Apptainer for HPC)
+    License Apache-2.0
+
+%environment
+    export LANG=C.UTF-8
+    export LC_ALL=C.UTF-8
+    export PATH=/opt/conda/bin:$PATH
+    export CONDA_DEFAULT_ENV=oa_prs_gpu
+
+%post
+    # System packages
+    apt-get update && apt-get install -y --no-install-recommends \
+        build-essential cmake git wget curl unzip \
+        tabix samtools bcftools \
+        plink1.9 plink2 \
+        r-base r-base-dev \
+        libhdf5-dev libcurl4-openssl-dev libssl-dev \
+        libxml2-dev liblapack-dev libblas-dev \
+        && rm -rf /var/lib/apt/lists/*
+
+    # Install Miniconda
+    wget -q https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O /tmp/miniconda.sh
+    bash /tmp/miniconda.sh -b -p /opt/conda
+    rm /tmp/miniconda.sh
+    export PATH=/opt/conda/bin:$PATH
+
+    # Create conda environment with GPU packages
+    conda create -y -n oa_prs_gpu python=3.11
+    conda run -n oa_prs_gpu conda install -y -c conda-forge \
+        numpy pandas scipy scikit-learn h5py \
+        pyyaml click structlog tqdm
+
+    # Install PyTorch and TensorFlow with CUDA support
+    conda run -n oa_prs_gpu pip install --no-cache-dir \
+        torch==2.2.0 --index-url https://download.pytorch.org/whl/cu121
+    conda run -n oa_prs_gpu pip install --no-cache-dir \
+        tensorflow==2.15.0
+
+    # Install additional Python packages
+    conda run -n oa_prs_gpu pip install --no-cache-dir \
+        xgboost pandas-plink pyarrow hydra-core omegaconf \
+        matplotlib seaborn plotly
+
+    # Install R packages for LDpred2
+    R -e "install.packages(c('bigsnpr', 'bigstatsr', 'data.table', 'R.utils'), repos='https://cloud.r-project.org/')"
+
+    # Create project directories
+    mkdir -p /opt/oa_prs
+    mkdir -p /data /outputs /logs
+
+    # Clean up
+    conda clean -ya
+    apt-get clean
+
+%files
+    # Copy project source (built from project root)
+    src/ /opt/oa_prs/src/
+    pyproject.toml /opt/oa_prs/pyproject.toml
+    configs/ /opt/oa_prs/configs/
+    scripts/ /opt/oa_prs/scripts/
+
+%post
+    # Install the OA-PRS package
+    cd /opt/oa_prs
+    conda run -n oa_prs_gpu pip install -e .
+
+%runscript
+    exec conda run -n oa_prs_gpu python -m oa_prs.cli "$@"
+
+%help
+    OA-PRS Transfer Learning Pipeline
+    ==================================
+    Singularity/Apptainer container for HPC clusters with NVIDIA GPU support.
+
+    Usage:
+        singularity run --nv oa_prs_gpu.sif --help
+        singularity run --nv oa_prs_gpu.sif run --config configs/config.yaml
+        singularity exec --nv oa_prs_gpu.sif conda run -n oa_prs_gpu python -m oa_prs.cli run --step catn
+
+    Bind mounts:
+        singularity run --nv --bind /path/to/data:/data --bind /path/to/outputs:/outputs oa_prs_gpu.sif

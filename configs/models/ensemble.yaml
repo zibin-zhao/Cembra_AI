@@ -1,0 +1,42 @@
+# Ensemble/Stacking Configuration
+ensemble:
+  # Stacking model: combine all branches
+  stacking:
+    method: "ridge"          # ridge, xgboost, or linear
+    # Input features from each branch
+    branches:
+      branch_a_prs_cs: true
+      branch_a_prs_csx: true
+      branch_a_bridge_prs: true
+      branch_a_ldpred2: true
+      branch_b_refined_prs: true
+      branch_c_catn: true
+      branch_d_twas_gene_scores: true
+    # Cross-validation for stacking weights
+    cv_folds: 5
+    # Regularization
+    alpha: 1.0  # Ridge alpha
+
+  # PRS refinement (feed fine-mapped priors back)
+  refinement:
+    methods:
+      # Method 1: Use fine-mapped posterior effects directly as weights
+      posterior_direct:
+        enabled: true
+        pip_threshold: 0.1  # Only use SNPs with PIP > threshold
+
+      # Method 2: Inject PIP/functional scores as priors into PRS-CS
+      prior_reweight:
+        enabled: true
+        prior_weight: 0.5   # How much to trust functional prior vs data
+
+  # PUMAS-ensemble (summary-stat-only tuning)
+  pumas:
+    enabled: true
+    reference: "https://link.springer.com/article/10.1186/s13059-024-03400-w"
+    methods_to_combine: ["prs_cs", "ldpred2", "prs_csx"]
+
+  resources:
+    memory: "16G"
+    cpus: 4
+    time: "1:00:00"

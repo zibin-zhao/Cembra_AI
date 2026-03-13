@@ -1,0 +1,23 @@
+# SuSiE-inf Configuration (fine-mapping with infinitesimal effects)
+susie_inf:
+  # SuSiE-inf improves calibration over standard SuSiE for polygenic traits
+  method: "susie_inf"
+
+  params:
+    max_causal: 10         # Max causal variants per locus
+    coverage: 0.95         # Credible set coverage
+    min_abs_corr: 0.5      # Minimum absolute correlation for credible sets
+    # Use PolyFun priors as input
+    use_functional_prior: true
+    prior_source: "polyfun"
+
+  # Locus definition
+  locus:
+    window_size: 1000000   # 1Mb windows around GWAS hits
+    p_threshold: 5.0e-8    # Genome-wide significance for defining loci
+    p_threshold_suggestive: 1.0e-5  # Include suggestive hits too
+
+  resources:
+    memory: "128G"
+    cpus: 16
+    time: "16:00:00"

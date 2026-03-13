@@ -1,0 +1,23 @@
+# PRS-CS Configuration (single-ancestry baseline)
+prs_cs:
+  executable: "PRScs.py"
+  repo_url: "https://github.com/getian107/PRScs"
+  install_dir: "${data.data_dir}/tools/prs_cs/"
+
+  params:
+    phi: null            # null = auto-learn from data (recommended for large GWAS)
+    n_iter: 1000         # MCMC iterations
+    n_burnin: 500        # Burn-in iterations
+    thin: 5              # Thinning factor
+    beta_std: false      # false = per-allele effect (not standardized)
+    seed: ${project.seed}
+
+  # Grid search for phi (if auto doesn't converge)
+  phi_grid: [1.0e-6, 1.0e-4, 1.0e-2, 1.0]
+
+  # Resource requirements
+  resources:
+    memory: "64G"
+    cpus: 1              # PRS-CS is single-threaded per chromosome
+    time: "4:00:00"
+    array: "1-22"        # Parallelize by chromosome

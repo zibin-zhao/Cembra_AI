@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "oa-prs-transfer"
+version = "0.1.0"
+description = "Cross-ancestry transfer learning pipeline for Osteoarthritis Polygenic Risk Score prediction"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Benny Zhao", email = "zhaozibin1999@gmail.com"},
+]
+keywords = ["PRS", "polygenic risk score", "transfer learning", "GWAS", "osteoarthritis", "cross-ancestry"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    "scikit-learn>=1.3",
+    "pyarrow>=12.0",
+    "h5py>=3.9",
+    "click>=8.1",
+    "hydra-core>=1.3",
+    "omegaconf>=2.3",
+    "structlog>=23.1",
+    "pyyaml>=6.0",
+    "matplotlib>=3.7",
+    "seaborn>=0.12",
+    "tqdm>=4.65",
+    "pandas-plink>=2.2",
+    "xgboost>=1.7",
+]
+
+[project.optional-dependencies]
+gpu = [
+    "torch>=2.0",
+    "tensorflow>=2.12",
+    "einops>=0.6",
+]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.1",
+    "mypy>=1.5",
+    "pre-commit>=3.3",
+]
+all = ["oa-prs-transfer[gpu,dev]"]
+
+[project.scripts]
+oa-prs = "oa_prs.cli:main"
+
+[project.urls]
+Repository = "https://github.com/YOUR_ORG/oa-prs-transfer"
+Documentation = "https://github.com/YOUR_ORG/oa-prs-transfer/tree/main/docs"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "gpu: marks tests that require GPU",
+    "integration: marks integration tests",
+]

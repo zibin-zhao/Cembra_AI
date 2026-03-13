@@ -1,0 +1,50 @@
+# =============================================================================
+# OA-PRS Transfer Learning Pipeline — Master Configuration
+# =============================================================================
+# Override any value via CLI: oa-prs run data.mode=toy models.catn.epochs=50
+
+defaults:
+  - data/gwas_sources
+  - data/ld_references
+  - data/annotations
+  - models/prs_cs
+  - models/prs_csx
+  - models/bridge_prs
+  - models/ldpred2
+  - models/enformer
+  - models/polyfun
+  - models/susie_inf
+  - models/catn
+  - models/twas
+  - models/ensemble
+  - evaluation/metrics
+  - slurm/gpu_job
+  - _self_
+
+# -- Project-wide settings --
+project:
+  name: "oa_prs_transfer"
+  version: "0.1.0"
+  seed: 42
+  n_threads: 8
+  log_level: "INFO"
+
+# -- Data mode --
+data:
+  mode: "full"  # "full" or "toy"
+  reference_genome: "hg38"
+  primary_phenotype: "knee_oa"
+  target_ancestry: "EAS"       # CHB+CHS from 1KG
+  base_ancestry: "EUR"
+  data_dir: "data/"
+  raw_dir: "${data.data_dir}/raw"
+  processed_dir: "${data.data_dir}/processed"
+  toy_dir: "${data.data_dir}/toy"
+
+# -- Output --
+output:
+  dir: "outputs/"
+  checkpoints_dir: "${output.dir}/checkpoints"
+  results_dir: "${output.dir}/results"
+  reports_dir: "${output.dir}/reports"
+  figures_dir: "${output.dir}/figures"

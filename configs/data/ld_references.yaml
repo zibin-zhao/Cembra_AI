@@ -1,0 +1,39 @@
+# LD Reference Panel Configuration
+ld_references:
+  source: "1000_genomes_phase3"
+  build: "hg38"
+
+  populations:
+    EUR:
+      description: "European (CEU+TSI+FIN+GBR+IBS)"
+      n_samples: 503
+      download_url: null  # Will use PRS-CSx bundled references
+      prs_csx_ref_dir: "${data.data_dir}/ld_ref/prs_csx/EUR"
+      plink_prefix: "${data.data_dir}/ld_ref/1kg/EUR/1kg_eur"
+
+    EAS:
+      description: "East Asian (CHB+CHS+CDX+JPT+KHV), prioritize CHB+CHS for HK Chinese"
+      n_samples: 504
+      download_url: null
+      prs_csx_ref_dir: "${data.data_dir}/ld_ref/prs_csx/EAS"
+      plink_prefix: "${data.data_dir}/ld_ref/1kg/EAS/1kg_eas"
+      # Sub-population for HK Chinese target
+      subpop_ids: ["CHB", "CHS"]
+
+    # Additional ancestries for multi-ancestry analysis
+    AFR:
+      description: "African"
+      n_samples: 661
+      prs_csx_ref_dir: "${data.data_dir}/ld_ref/prs_csx/AFR"
+
+    SAS:
+      description: "South Asian"
+      n_samples: 489
+      prs_csx_ref_dir: "${data.data_dir}/ld_ref/prs_csx/SAS"
+
+  # LD block definitions (for CATN model)
+  ld_blocks:
+    # Berisa & Pickrell 2016 LD blocks, lifted to hg38
+    source: "https://bitbucket.org/nygcresearch/ldetect-data"
+    build: "hg38"
+    path: "${data.data_dir}/ld_ref/ld_blocks_hg38.bed"

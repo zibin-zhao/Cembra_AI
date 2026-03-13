@@ -1,0 +1,58 @@
+# Evaluation Metrics Configuration
+evaluation:
+  # Discrimination metrics
+  discrimination:
+    auc_roc: true
+    auc_pr: true
+    c_index: false         # Enable if time-to-event data available
+
+  # Calibration metrics
+  calibration:
+    brier_score: true
+    hosmer_lemeshow:
+      enabled: true
+      n_groups: 10
+    calibration_plot: true
+
+  # Risk stratification
+  risk_stratification:
+    quantiles: [1, 5, 10, 20]   # Top X% risk groups
+    odds_ratios: true
+    decision_curve_analysis: true
+
+  # Cross-ancestry fairness
+  fairness:
+    enabled: true
+    # Compare metrics across ancestries
+    compare_ancestries: ["EUR", "EAS"]
+    # Threshold consistency: same threshold should give similar performance
+    threshold_consistency: true
+    # Calibration gap between ancestries
+    calibration_gap: true
+    # Per-subgroup (sex, age) analysis
+    subgroups:
+      sex: true
+      age_bins: [40, 50, 60, 70]
+
+  # Leave-one-study-out validation
+  leave_one_study:
+    enabled: true
+    studies:
+      - {train: "eur_secondary", eval: "eur_primary"}  # Train on 2022, eval on 2019
+      - {train: "eur_primary", eval: "eur_secondary"}  # Train on 2019, eval on 2022
+    metrics: ["direction_consistency", "enrichment_consistency", "effect_correlation"]
+
+  # Ablation study
+  ablation:
+    enabled: true
+    # Test contribution of each branch
+    remove_branches:
+      - "branch_c_catn"
+      - "branch_b_refined_prs"
+      - "branch_d_twas_gene_scores"
+
+  # Report generation
+  report:
+    format: "html"           # html or pdf
+    include_figures: true
+    figure_dpi: 300

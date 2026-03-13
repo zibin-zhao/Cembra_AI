@@ -1,0 +1,18 @@
+# LDpred2-auto Configuration
+ldpred2:
+  # LDpred2 is implemented in R (bigsnpr package)
+  r_package: "bigsnpr"
+  method: "auto"  # auto, inf, grid
+
+  params:
+    # LDpred2-auto parameters
+    burn_in: 500
+    num_iter: 500
+    sparse: true           # Enable sparse solution
+    shrink_corr: 0.95      # Shrinkage for correlation matrix
+    allow_jump_sign: false  # Don't allow sign changes
+
+  resources:
+    memory: "128G"         # LDpred2 needs substantial memory for LD matrix
+    cpus: 8
+    time: "6:00:00"

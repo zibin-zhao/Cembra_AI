@@ -1,0 +1,51 @@
+# Data directories (large files, not tracked)
+data/raw/
+data/processed/
+data/external/
+data/ld_ref/
+
+# Model outputs
+outputs/
+checkpoints/
+*.pt
+*.pth
+*.pkl
+*.joblib
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environments
+.venv/
+env/
+*.conda
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# HPC
+slurm-*.out
+slurm-*.err
+
+# Singularity
+*.sif

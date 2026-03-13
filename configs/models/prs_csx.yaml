@@ -1,0 +1,26 @@
+# PRS-CSx Configuration (cross-ancestry transfer)
+prs_csx:
+  executable: "PRScsx.py"
+  repo_url: "https://github.com/getian107/PRScsx"
+  install_dir: "${data.data_dir}/tools/prs_csx/"
+
+  params:
+    populations: ["EUR", "EAS"]
+    phi: null               # null = auto-learn (recommended)
+    n_iter: 1000
+    n_burnin: 500
+    thin: 5
+    meta: true              # Produce meta-analyzed weights
+    seed: ${project.seed}
+
+  # For Hong Kong Chinese: primarily EUR + EAS
+  # If additional ancestries become available, add here
+  gwas_files:
+    EUR: "${data.processed_dir}/gwas_eur_harmonized.tsv"
+    EAS: "${data.processed_dir}/gwas_eas_harmonized.tsv"
+
+  resources:
+    memory: "64G"
+    cpus: 1
+    time: "8:00:00"
+    array: "1-22"

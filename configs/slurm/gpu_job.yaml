@@ -1,0 +1,35 @@
+# SLURM GPU Job Defaults
+slurm:
+  gpu:
+    partition: "gpu"           # Adjust to your cluster partition name
+    account: null              # Adjust to your account/project
+    qos: null                  # Quality of service
+    gpus_per_node: 1
+    gpu_type: "a100"
+    cpus_per_task: 4
+    mem: "64G"
+    time: "24:00:00"
+    # Singularity container
+    container:
+      enabled: true
+      image: "containers/oa_prs_gpu.sif"
+    # Environment modules (adjust to your cluster)
+    modules:
+      - "cuda/12.1"
+      - "singularity/3.11"
+    # Email notifications
+    mail_type: "END,FAIL"
+    mail_user: null
+
+  cpu:
+    partition: "cpu"
+    account: null
+    cpus_per_task: 8
+    mem: "64G"
+    time: "8:00:00"
+    container:
+      enabled: true
+      image: "containers/oa_prs_cpu.sif"
+    modules: []
+    mail_type: "END,FAIL"
+    mail_user: null

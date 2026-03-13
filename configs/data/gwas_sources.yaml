@@ -1,0 +1,69 @@
+# GWAS Summary Statistics Sources
+gwas:
+  eur_primary:
+    name: "UKB 2019 Knee OA"
+    reference: "Zengini et al., Nature Genetics 2019"
+    url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC6400267/"
+    # Actual download URLs to be filled after data access approval
+    download_url: null
+    phenotype: "knee_oa"
+    ancestry: "EUR"
+    sample_size: 403124
+    n_cases: 24955
+    n_controls: 378169
+    build: "hg19"  # Will be lifted to hg38
+    expected_columns:
+      snp: "SNP"
+      chr: "CHR"
+      bp: "BP"
+      a1: "A1"
+      a2: "A2"
+      beta: "BETA"
+      se: "SE"
+      pval: "P"
+      freq: "FRQ"
+
+  eur_secondary:
+    name: "MVP + UKB 2022 Multi-ancestry OA"
+    reference: "Boer et al., Nature Genetics 2022"
+    url: "https://www.nature.com/articles/s41588-022-01221-w"
+    download_url: null
+    phenotype: "knee_oa"
+    ancestry: "EUR"
+    sample_size: 826690
+    build: "hg38"
+    expected_columns:
+      snp: "RSID"
+      chr: "CHR"
+      bp: "POS"
+      a1: "EA"
+      a2: "NEA"
+      beta: "BETA"
+      se: "SE"
+      pval: "P"
+      freq: "EAF"
+
+  eas:
+    name: "MVP + UKB 2022 EAS OA"
+    reference: "Boer et al., Nature Genetics 2022"
+    url: "https://www.nature.com/articles/s41588-022-01221-w"
+    download_url: null
+    phenotype: "knee_oa"
+    ancestry: "EAS"
+    sample_size: null  # To be determined
+    build: "hg38"
+
+  # Standardized output schema (all GWAS will be converted to this)
+  output_schema:
+    columns: ["SNP", "CHR", "BP", "A1", "A2", "BETA", "SE", "P", "MAF", "N"]
+    dtypes:
+      SNP: "str"
+      CHR: "int8"
+      BP: "int64"
+      A1: "str"
+      A2: "str"
+      BETA: "float64"
+      SE: "float64"
+      P: "float64"
+      MAF: "float64"
+      N: "int64"

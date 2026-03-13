@@ -1,0 +1,17 @@
+# BridgePRS Configuration
+bridge_prs:
+  executable: "BridgePRS"
+  repo_url: "https://github.com/clivehoggart/BridgePRS"
+  install_dir: "${data.data_dir}/tools/bridge_prs/"
+
+  params:
+    base_pop: "EUR"
+    target_pop: "EAS"
+    # BridgePRS produces 4 models: stage1, stage2, stage1+2, weighted
+    # "weighted" automatically selects the best
+    model_selection: "weighted"
+
+  resources:
+    memory: "64G"
+    cpus: 8
+    time: "12:00:00"

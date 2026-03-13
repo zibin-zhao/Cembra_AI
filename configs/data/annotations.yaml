@@ -1,0 +1,40 @@
+# Functional Annotation Sources
+annotations:
+  # OAOB: OA multi-omics biomarker database
+  oaob:
+    description: "Aggregated GWAS/DEG/DMR + single-cell joint cell-type markers"
+    reference: "Multi-omics molecular biomarkers and database of osteoarthritis"
+    url: "https://academic.oup.com/database/article/doi/10.1093/database/baac052/6631109"
+    tissues: ["cartilage", "synovium"]
+
+  # Tissue-specific functional annotations
+  turf:
+    description: "TURF/TLand/TITR tissue-specific functional prioritization"
+    reference: "Enhancing portability of trans-ancestral PRS through tissue-specific functional genomic data"
+    url: "https://journals.plos.org/plosgenetics/article?id=10.1371/journal.pgen.1011356"
+    path: "${data.data_dir}/external/turf/"
+
+  # Conservation scores
+  conservation:
+    phylop:
+      description: "PhyloP 100-way vertebrate conservation"
+      path: "${data.data_dir}/external/phylop/"
+    phastcons:
+      description: "phastCons 100-way vertebrate"
+      path: "${data.data_dir}/external/phastcons/"
+
+  # RegulomeDB
+  regulomedb:
+    description: "Variant regulatory potential ranking"
+    path: "${data.data_dir}/external/regulomedb/"
+
+  # GTEx for TWAS
+  gtex:
+    version: "v8"
+    tissues_of_interest:
+      - "Cells_Cultured_fibroblasts"
+      - "Adipose_Subcutaneous"
+      - "Muscle_Skeletal"
+      - "Whole_Blood"
+    model_dir: "${data.data_dir}/external/gtex_v8_models/"
+    covariance_dir: "${data.data_dir}/external/gtex_v8_covariances/"
